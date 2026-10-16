@@ -128,10 +128,21 @@ body.admin .addbar{display:block}
   <div class="dh"><span>سلة المشتريات</span><button onclick="toggleCart()">×</button></div>
   <div id="items"></div>
   <div class="total"><span>الإجمالي</span><span id="tot">0 ج.م</span></div>
-  <p class="note">هيتفتح واتساب برسالة جاهزة بطلبك. الدفع انستا باي على 01208858735 أو عند الاستلام.</p>
-  <button class="add" onclick="checkout()">إرسال الطلب عبر واتساب</button>
+  <p class="note">هتكمّل بياناتك وتأكد الطلب من الموقع نفسه. الدفع انستا باي أو عند الاستلام.</p>
+  <button class="add" onclick="checkout()">تأكيد الطلب</button>
 </aside>
 
+<div class="modal" id="om"><div class="mb" id="omb">
+  <h3>تأكيد الطلب</h3>
+  <div id="osum" style="font-size:.9rem"></div>
+  <label>الاسم</label><input id="on" autocomplete="name">
+  <label>رقم الموبايل</label><input id="op" type="tel" inputmode="tel" dir="ltr" autocomplete="tel">
+  <label>العنوان بالتفصيل (المحافظة والمنطقة والشارع)</label><input id="oa" autocomplete="street-address">
+  <label>طريقة الدفع</label><select id="opay" onchange="payUi()"><option value="instapay">انستا باي</option><option value="cod">الدفع عند الاستلام</option></select>
+  <div id="ipb"><label>رقم أو اسم حساب انستا باي اللي هتحوّل منه</label><input id="ois" dir="ltr"></div>
+  <label>ملاحظات (اختياري)</label><input id="ono">
+  <div class="row"><button class="pri" id="osb" onclick="submitOrder()">تأكيد الطلب</button><button onclick="$('om').classList.remove('open')">إلغاء</button></div>
+</div></div>
 <div class="modal" id="lm"><div class="mb"><h3>دخول الإدارة</h3>
   <label>اسم المستخدم</label><input id="lu" autocomplete="username">
   <label>كلمة السر</label><input id="lp" type="password" autocomplete="current-password">
@@ -182,12 +193,31 @@ function upd(){
   $("tot").textContent=t+" ج.م";$("cnt").textContent=n;
 }
 function toggleCart(){$("drawer").classList.toggle("open");$("shade").classList.toggle("open")}
+
+const WEB3_KEY="73574a0c-0f22-4bce-ae9c-7e5a398c565b";
+function payUi(){$("ipb").style.display=$("opay").value=="instapay"?"block":"none"}
 function checkout(){
   const ids=Object.keys(cart);if(!ids.length){alert("السلة فاضية");return}
-  let t=0,m="طلب جديد من Moody Store:%0A";
-  ids.forEach(i=>{const x=P.find(p=>p.id==i);t+=x.p*cart[i];m+=`- ${x.n} × ${cart[i]} = ${x.p*cart[i]} ج.م%0A`});
-  m+=`الإجمالي: ${t} ج.م%0Aالاسم والعنوان:`;
-  window.open("https://wa.me/201208858735?text="+m,"_blank");
+  let t=0,h="";ids.forEach(i=>{const x=P.find(p=>p.id==i);if(x){t+=x.p*cart[i];h+=`<div>${x.n} × ${cart[i]} = ${x.p*cart[i]} ج.م</div>`}});
+  $("osum").innerHTML=h+`<b>الإجمالي: ${t} ج.م</b>`;payUi();
+  if($("drawer").classList.contains("open"))toggleCart();
+  $("om").classList.add("open");
+}
+async function submitOrder(){
+  const n=$("on").value.trim(),ph=$("op").value.trim(),a=$("oa").value.trim(),pay=$("opay").value,is=$("ois").value.trim();
+  if(!n||!ph||!a){alert("اكتب الاسم والموبايل والعنوان");return}
+  if(pay=="instapay"&&!is){alert("اكتب رقم أو اسم حساب انستا باي اللي هتحوّل منه");return}
+  const ids=Object.keys(cart);let t=0,m="";
+  ids.forEach(i=>{const x=P.find(p=>p.id==i);if(x){t+=x.p*cart[i];m+=`- ${x.n} × ${cart[i]} = ${x.p*cart[i]} ج.م\n`}});
+  const no="MS-"+String(Date.now()).slice(-6);
+  const body=`رقم الطلب: ${no}\nالاسم: ${n}\nالموبايل: ${ph}\nالعنوان: ${a}\nالدفع: ${pay=="instapay"?"انستا باي - محوّل من: "+is:"عند الاستلام"}\nالمنتجات:\n${m}الإجمالي: ${t} ج.م\nملاحظات: ${$("ono").value}`;
+    const b=$("osb");b.disabled=true;b.textContent="جاري الإرسال...";
+  try{
+    const r=await fetch("https://api.web3forms.com/submit",{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify({access_key:WEB3_KEY,subject:"طلب جديد "+no+" - Moody Store",from_name:"Moody Store",name:n,phone:ph,message:body})});
+    const j=await r.json();if(!j.success)throw 0;
+    cart={};upd();
+    $("omb").innerHTML=`<h3>✅ تم تأكيد طلبك</h3><p>رقم طلبك: <b dir="ltr">${no}</b></p><p>الإجمالي: <b>${t} ج.م</b></p>`+(pay=="instapay"?`<p>حوّل المبلغ على انستا باي رقم <b dir="ltr">01208858735</b>. هنأكد التحويل ونجهز طلبك.</p>`:`<p>هتدفع عند الاستلام، وهنتواصل معاك لتأكيد الطلب.</p>`)+`<div class="row"><button class="pri" onclick="location.reload()">تمام</button></div>`;
+  }catch(e){b.disabled=false;b.textContent="تأكيد الطلب";alert("حصلت مشكلة في الإرسال، جرّب تاني.")}
 }
 function copyN(){try{navigator.clipboard.writeText("01208858735");alert("تم نسخ الرقم")}catch(e){alert("01208858735")}}
 function adminToggle(){
