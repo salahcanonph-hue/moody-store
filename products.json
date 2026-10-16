@@ -1,1 +1,10 @@
-{"settings": {"email": "", "l": "https://ipn.eg/S/salahcaomph/instapay/5E3T5B", "s": 0, "f": 0, "a": "شحن لكل المحافظات"}, "products": []}
+{
+ "settings": {
+  "email": "",
+  "l": "https://ipn.eg/S/salahcaomph/instapay/5E3T5B",
+  "s": 0,
+  "f": 1499,
+  "a": "شحن لكل المحافظات"
+ },
+ "products": []
+}
