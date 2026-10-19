@@ -72,7 +72,7 @@ button.tl:hover{transform:translateY(-3px)}
 input[type=color]{padding:2px;height:42px;cursor:pointer}.sw{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 4px}.sw button{width:44px;height:44px;border-radius:50%;border:2px solid var(--line2);background:linear-gradient(135deg,var(--a) 50%,var(--b) 50%);padding:0}.sw button:hover{border-color:var(--ink)}
 #dLook{width:min(94vw,600px)}#dLook details{border:1px solid var(--line);border-radius:var(--rad);padding:0 14px 14px;margin-top:10px;background:#fff}
 #dLook summary{cursor:pointer;font-weight:700;padding:12px 0;font-size:16px}
-.lf{position:sticky;bottom:-24px;background:var(--bg);padding:14px 0 4px;margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}.lf .btn{flex:1;padding-inline:14px}
+.lf{position:sticky;bottom:-24px;background:var(--bg);padding:14px 0 4px;margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}.lf .btn{flex:1;padding:10px 8px;font-size:14px;white-space:nowrap;border-radius:12px}
 .chk{display:flex!important;align-items:center;gap:8px}.chk input{width:auto!important;margin:0!important}
 .ov{display:flex;align-items:center;gap:10px;margin-top:8px}.ov span{flex:1;font-weight:600;font-size:14px}.ov input[type=color]{width:64px;margin:0}.ov label{margin:0;display:flex;gap:4px;align-items:center;font-size:13px}.ov label input{width:auto;margin:0}
 .od{display:flex;align-items:center;gap:8px;margin-top:8px}.od span{flex:1;font-weight:600;font-size:14px}.od button{width:34px;height:34px;border:1px solid var(--line2);background:#fff;border-radius:8px}.od label{margin:0;font-size:13px}
@@ -228,7 +228,7 @@ table{width:100%;border-collapse:collapse;text-align:center;font-size:14px}th,td
 <label>ملاحظات (اختياري)<input name="t"></label>
 <div class="row"><button class="btn" id="sb">تأكيد الطلب</button><button type="button" class="btn ln" data-c>إلغاء</button></div></form></dialog>
 <dialog id="dOk"><div class="ok" id="okb"></div></dialog>
-<dialog id="dLog"><form id="fl"><h3>دخول الإدارة</h3><p><small>الصق مفتاح GitHub (مرة واحدة). بيتحفظ على جهازك بس.</small></p><label>المفتاح<input name="k" type="password" autocomplete="off" required></label><div class="row"><button class="btn">دخول</button><button type="button" class="btn ln" data-c>إلغاء</button></div></form></dialog>
+<dialog id="dLog"><form id="flg"><h3>دخول الإدارة</h3><p><small>الصق مفتاح GitHub (مرة واحدة). بيتحفظ على جهازك بس.</small></p><label>المفتاح<input name="k" type="password" autocomplete="off" required></label><p id="le" role="alert" style="color:#c4001a;font-weight:600;margin-top:8px"></p><details style="margin-top:10px"><summary style="cursor:pointer;font-weight:600">مشكلة في الدخول؟</summary><small>لو الموقع على دومين خاص أو اسم الريبو اتغير، اكتب البيانات الصح هنا.</small><label>اسم حساب GitHub<input name="o" autocomplete="off"></label><label>اسم الريبو<input name="r" autocomplete="off"></label></details><div class="row"><button class="btn">دخول</button><button type="button" class="btn ln" data-c>إلغاء</button></div></form></dialog>
 <dialog id="dSet"><form id="fs"><h3>إعدادات المتجر</h3>
 <label>رابط دفع انستا باي (اختياري)<input name="l" type="url" placeholder="https://ipn.eg/..."></label>
 <div class="row" style="margin:0"><label>مصاريف الشحن (ج.م)<input name="s" type="number" min="0"></label><label>شحن مجاني فوق (ج.م)<input name="f" type="number" min="0"></label></div>
@@ -298,7 +298,7 @@ table{width:100%;border-collapse:collapse;text-align:center;font-size:14px}th,td
 <label>روابط إضافية في الفوتر (كل سطر: الاسم | الرابط)<textarea name="xl" rows="3" placeholder="سياسة الخصوصية | https://..."></textarea></label>
 <label>وصف الموقع لمحركات البحث<textarea name="ds" rows="2" maxlength="160"></textarea></label>
 </details>
-<div class="lf"><button class="btn">حفظ</button><button type="button" class="btn ln" data-c>إلغاء</button><button type="button" class="btn ln" id="lrs">استرجاع الشكل الأصلي</button></div></form></dialog>
+<div class="lf"><button class="btn">حفظ</button><button type="button" class="btn ln" data-c>إلغاء</button><button type="button" class="btn ln" id="lrs">استرجاع الأصل</button></div></form></dialog>
 <dialog id="dCat"><form id="fc"><h3>الأقسام</h3><p><small>اكتب اسم كل قسم. تقدر تضيف قسم جديد أو تعدل الاسم أو تحذف أو تغيّر الترتيب بالأسهم.</small></p><div id="cr"></div><button type="button" class="btn ln" id="ac" style="width:100%;margin-top:12px">+ قسم جديد</button><div class="row"><button class="btn">حفظ</button><button type="button" class="btn ln" data-c>إلغاء</button></div></form></dialog>
 <div id="toast" role="status"></div>
 
@@ -306,18 +306,17 @@ table{width:100%;border-collapse:collapse;text-align:center;font-size:14px}th,td
 const TT='https://www.tiktok.com/@mody_store26',W3K='73574a0c-0f22-4bce-ae9c-7e5a398c565b',IPL='https://ipn.eg/S/salahcaomph/instapay/5E3T5B',DEF=[{k:'jackets',n:'جواكت'},{k:'pants',n:'بناطيل'},{k:'shirts',n:'قمصان وتيشرتات'}];
 const WA0='201208858735',IP0='01208858735',IPA0='salahcaomph@instapay',TRK='%D8%A3%D8%B1%D9%8A%D8%AF%20%D9%85%D8%AA%D8%A7%D8%A8%D8%B9%D8%A9%20%D8%B7%D9%84%D8%A8%D9%8A%20%D8%B1%D9%82%D9%85%20',RG='M12 50V14h24l10 6v13l-6 6.5L52 50H41.5L29 41.5H20V50zM20 22v11.5h14l4-3.5v-4.5L34 22z';
 let WA=WA0,IP=IP0,IPA=IPA0,SPD=55,CUR={};
-const owner=location.hostname.split('.')[0],repo=location.pathname.split('/')[1]||'moody-store';
-const API='https://api.github.com/repos/'+owner+'/'+repo+'/contents/';
 const $=id=>document.getElementById(id);
 const cats=()=>S.c&&S.c.length?S.c:DEF;
 const ls={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
+let owner=ls.get('mo')||location.hostname.split('.')[0],repo=ls.get('mr')||location.pathname.split('/')[1]||'moody-store',API='https://api.github.com/repos/'+owner+'/'+repo+'/contents/';
 let P=[],S={email:'',l:'',s:0,f:0,a:'',h:'',t:'',n:'',cc:'',cp:0,g:'',pl:'',tt:''},cat='all',cart=[],tok=ls.get('mt')||'',sha='',admin=false,editId=null,qp=null,qs=[],qc='',applied=false;
 try{cart=JSON.parse(ls.get('mc')||'[]')}catch(e){}
 const fmt=n=>Number(n).toLocaleString('en-US');
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const b64=s=>btoa(unescape(encodeURIComponent(s)));
 const H=()=>({Authorization:'Bearer '+tok,Accept:'application/vnd.github+json'});
-const toast=m=>{const t=$('toast');t.textContent=m;t.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>t.style.display='none',3500)};
+const toast=m=>{const t=$('toast'),d=document.querySelector('dialog[open]');(d||document.body).appendChild(t);t.textContent=m;t.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>t.style.display='none',3500)};
 const norm=j=>{if(Array.isArray(j))P=j;else if(j){P=j.products||[];S=Object.assign(S,j.settings||{})}};
 
 async function load(){
@@ -407,10 +406,19 @@ $('fo').onsubmit=async e=>{e.preventDefault();const f=Object.fromEntries(new For
  :`<h3>كمّل الطلب من واتساب</h3><div class="no">${no}</div><p>اضغط الزرار عشان يوصلنا طلبك.</p>${pay}<a class="btn" href="${wl}" target="_blank" rel="noopener">ابعت الطلب على واتساب</a>`;
  cart=[];renderCart();$('dOrd').close();e.target.reset();$('dOk').showModal()};
 
-$('adm').onclick=()=>admin?toast('أنت داخل بالفعل'):$('dLog').showModal();
-$('fl').onsubmit=async e=>{e.preventDefault();tok=new FormData(e.target).get('k').trim();
- const r=await fetch('https://api.github.com/repos/'+owner+'/'+repo,{headers:H()}).catch(()=>null);
- if(r&&r.ok&&(await r.json()).permissions?.push){ls.set('mt',tok);$('dLog').close();await load();render();toast('تم الدخول ✓')}else{tok='';toast('المفتاح غير صحيح أو ملوش صلاحية تعديل')}};
+$('adm').onclick=()=>{if(admin)return toast('أنت داخل بالفعل');const f=$('flg');f.o.value=owner;f.r.value=repo;$('le').textContent='';$('dLog').showModal()};
+$('flg').onsubmit=async e=>{e.preventDefault();const f=e.target,le=m=>{$('le').textContent=m},k=f.k.value.trim(),o=f.o.value.trim()||owner,rp=f.r.value.trim()||repo;
+ le('جاري التحقق...');if(o!==owner||rp!==repo){owner=o;repo=rp;API='https://api.github.com/repos/'+owner+'/'+repo+'/contents/'}tok=k;
+ let r=null;try{r=await fetch('https://api.github.com/repos/'+owner+'/'+repo,{headers:H()})}catch(x){}
+ if(!r){tok='';le('مفيش اتصال بالإنترنت، جرّب تاني.');return}
+ if(r.status===401){tok='';le('المفتاح غير صحيح أو منتهي. اعمل مفتاح جديد من GitHub.');return}
+ if(r.status===404){tok='';le('المفتاح مالوش صلاحية على الريبو '+owner+'/'+repo+' أو اسم الحساب والريبو غلط. افتح "مشكلة في الدخول؟" وراجعهم.');return}
+ if(!r.ok){tok='';le('GitHub رد بخطأ '+r.status+'، جرّب بعد شوية.');return}
+ let j={};try{j=await r.json()}catch(x){}
+ if(j.permissions&&j.permissions.push===false){tok='';le('المفتاح للقراءة بس. لازم صلاحية Contents: Read and write.');return}
+ ls.set('mt',tok);ls.set('mo',owner);ls.set('mr',repo);await load();
+ if(!admin){ls.del('mt');tok='';le('المفتاح اتقبل لكن مش قادر يقرا ملف المنتجات. راجع صلاحية Contents في المفتاح.');return}
+ $('dLog').close();render();toast('تم الدخول ✓')};
 $('out').onclick=()=>{ls.del('mt');location.reload()};
 $('addp').onclick=()=>openProd(null);
 $('set').onclick=()=>{const f=$('fs');f.l.value=S.l||'';f.s.value=S.s||'';f.f.value=S.f||'';f.a.value=S.a||'';f.n.value=S.n||'';f.tt.value=S.tt||'';f.cc.value=S.cc||'';f.cp.value=S.cp||'';f.g.value=S.g||'';f.pl.value=S.pl||'';f.h.value=S.h||'';f.t.value=S.t||'';$('dSet').showModal()};
